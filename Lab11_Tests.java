@@ -18,6 +18,23 @@ public class Lab11_Tests {
         threadA.start();
         threadB.start();
 
+        try {
+            threadA.join();
+            threadB.join();
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+
+        int a1_count = 0;
+        int b1_count = 0;
+        for (String s : threadA.getData()) {
+            switch (s.substring(0, 2)) {
+                case "A1" -> a1_count++;
+                case "B1" -> b1_count++;
+            }
+        }
+        assertEquals(100, a1_count);
+        assertEquals(100, b1_count);
     }
 
     /*
@@ -37,6 +54,7 @@ public class Lab11_Tests {
             e.printStackTrace();
         }
 
+        assertEquals(true, threadA.getData().size() >= 10);
     }
 
     /*
@@ -57,5 +75,22 @@ public class Lab11_Tests {
         }
         
         threadB.start();
+
+        try {
+            threadB.join();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        int a3_before_b3_count = 0;
+        loop: for (String s : threadA.getData()) {
+            switch (s.substring(0, 2)) {
+                case "A3":
+                    a3_before_b3_count++;
+                    break;
+                case "B3":
+                    break loop;
+            }
+        }
+        assertEquals(10, a3_before_b3_count);
     }
 }
